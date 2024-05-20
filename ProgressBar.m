@@ -15,6 +15,12 @@ classdef ProgressBar < handle
         progressCharEnd = ']'
     end
 
+    % Only overridable for testing
+    properties (Access=protected)
+        funTic = @tic
+        funToc = @toc
+    end
+
     properties (Access=private)
         totalIterations
         currentIteration = 0
@@ -26,12 +32,12 @@ classdef ProgressBar < handle
     methods
         function obj = ProgressBar(totalIterations)
             obj.totalIterations = totalIterations;
-            obj.lastTic = tic();
+            obj.lastTic = obj.funTic();
             obj.measurements = [];
         end
 
         function disp(obj, formatString)
-            obj.measurements = [obj.measurements, toc(obj.lastTic)];
+            obj.measurements = [obj.measurements, obj.funToc(obj.lastTic)];
             if length(obj.measurements) > obj.timeFilterWindow
                 obj.measurements = obj.measurements(2:end);
             end
@@ -49,7 +55,7 @@ classdef ProgressBar < handle
 
             obj.numCharsLastPrinted = fprintf(obj.outputStream, '%s', output);
 
-            obj.lastTic = tic();
+            obj.lastTic = obj.funTic();
         end
 
         function timeRemaining = timeRemaining(obj)
@@ -73,6 +79,7 @@ classdef ProgressBar < handle
 
         function barString = progressBar(obj)
             numCompleteChars = floor(obj.progressWidth * obj.fractionComplete());
+            
             barString = [obj.progressCharFirst, ...
                 repmat(obj.progressCharDone,1,numCompleteChars), ...
                 repmat(obj.progressCharTodo,1,obj.progressWidth-numCompleteChars), ...

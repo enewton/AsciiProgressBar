@@ -1,16 +1,24 @@
+% First example script demonstrating how to get a Progress Bar in your
+% application by adding 2 lines:
 
-loopSize = 20;
+numX = 10;
+numY = 5;
 
-disp('Please wait:')
+fprintf('Please wait: ');
 
-pb = ProgressBar(loopSize);
+% Need to tell it how many iterations there will be
+pb = ProgressBar(numX * numY);
 
-for lp = 1:loopSize
+for lpx = 1:numX
+    for lpy = 1:numY
 
-    % Do some work
-    pause(0.5);
+        % Do some work
+        pause(0.2);
 
-    % Display the progress bar
-    pb.disp('Progress: {bar} Time remaining: {timeRemaining}');
+        % Display the progress bar
+        pb.disp('Progress: {bar} Time remaining: {timeRemaining}');
 
+    end
 end
+
+fprintf('\nAll done.');
