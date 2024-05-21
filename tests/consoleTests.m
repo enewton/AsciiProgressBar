@@ -16,5 +16,15 @@ classdef consoleTests < matlab.unittest.TestCase
 
             testCase.verifyEqual(output, 'Progress [##..................]');
         end
+
+        function disp_steps(testCase)
+            pb = ProgressBar(10); %#ok<*NASGU> 
+
+            pb.disp('');
+            pb.disp('');
+            output = evalc("pb.disp('Step {step} of {steps}')");
+
+            testCase.verifyEqual(output, 'Step 3 of 10');
+        end
     end
 end

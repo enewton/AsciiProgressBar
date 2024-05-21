@@ -56,6 +56,8 @@ classdef ProgressBar < handle
             output = strrep(formatString, '{timeRemaining}', obj.timeRemaining());
             output = strrep(output, '{bar}', obj.progressBar());
             output = strrep(output, '{eta}', obj.etaString());
+            output = strrep(output, '{step}', num2str(obj.currentIteration));
+            output = strrep(output, '{steps}', num2str(obj.totalIterations));
 
             fprintf(obj.outputStream, repmat('\b', 1, obj.numCharsLastPrinted));
 
