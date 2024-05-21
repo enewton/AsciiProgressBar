@@ -18,6 +18,7 @@ classdef ProgressBar < handle
 
     % Only overridable for testing
     properties (Access=protected)
+        startTime
         funTic = @tic
         funToc = @toc
         funNow = @now
@@ -35,6 +36,7 @@ classdef ProgressBar < handle
     methods
         function obj = ProgressBar(totalIterations)
             obj.totalIterations = totalIterations;
+            obj.startTime = obj.funNow();
             obj.latestTime = obj.funNow();
             obj.lastTic = obj.funTic();
             obj.measurements = [];
@@ -54,6 +56,7 @@ classdef ProgressBar < handle
             end
 
             output = strrep(formatString, '{timeRemaining}', obj.timeRemaining());
+            output = strrep(output, '{timeElapsed}', obj.timeElapsed());
             output = strrep(output, '{bar}', obj.progressBar());
             output = strrep(output, '{eta}', obj.etaString());
             output = strrep(output, '{step}', num2str(obj.currentIteration));
@@ -67,14 +70,11 @@ classdef ProgressBar < handle
         end
 
         function timeRemaining = timeRemaining(obj)
-            secondsRemaining = obj.secondsRemaining();
-            if secondsRemaining < 100
-                timeRemaining = sprintf([obj.formatTime ' seconds'], secondsRemaining);
-            elseif secondsRemaining < 60*60
-                timeRemaining = sprintf([obj.formatTime ' minutes'], secondsRemaining/60);
-            else
-                timeRemaining = sprintf([obj.formatTime ' hours'], secondsRemaining/60/60);
-            end
+            timeRemaining = obj.timeAsString(obj.secondsRemaining());
+        end
+
+        function timeElaspsed = timeElapsed(obj)
+            timeElaspsed = obj.timeAsString((obj.latestTime - obj.startTime)*24*60*60);
         end
 
         function eta = etaString(obj)
@@ -96,6 +96,18 @@ classdef ProgressBar < handle
                 repmat(obj.progressCharDone,1,numCompleteChars), ...
                 repmat(obj.progressCharTodo,1,obj.progressWidth-numCompleteChars), ...
                 obj.progressCharEnd];
+        end
+    end
+
+    methods (Access=private)
+        function str = timeAsString(obj, timeSeconds)
+            if timeSeconds < 100
+                str = sprintf([obj.formatTime ' seconds'], timeSeconds);
+            elseif timeSeconds < 60*60
+                str = sprintf([obj.formatTime ' minutes'], timeSeconds/60);
+            else
+                str = sprintf([obj.formatTime ' hours'], timeSeconds/60/60);
+            end
         end
     end
 end

@@ -4,12 +4,15 @@ classdef ProgressBarTestableTime < ProgressBar
 
     properties
         nextNowTime
-        nextTocTime
+        nextTocTime = 1/24/60/60
     end
 
     methods
-        function obj = ProgressBarTestableTime(totalIterations)
+        function obj = ProgressBarTestableTime(totalIterations, startTime)
             obj = obj@ProgressBar(totalIterations);
+            if nargin >= 2
+                obj.startTime = startTime;
+            end
             obj.funNow = @obj.now;
             obj.funTic = @obj.tic;
             obj.funToc = @obj.toc;
