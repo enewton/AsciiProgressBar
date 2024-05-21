@@ -1,17 +1,20 @@
 classdef consoleTests < matlab.unittest.TestCase
 
     methods (Test)
-
-        function disp_progressBar(testCase)
-            str = testCase.applyFixture(StdoutFixture);
-            
+        function disp_defaultFormatString(testCase)
             pb = ProgressBar(10);
 
-            pb.outputStream = str.stream();
+            output = evalc("pb.disp()");
 
-            pb.disp('Progress {bar}')
+            testCase.verifyEqual(output, 'Progress: [##..................] Time remaining: 0.0 seconds');
+        end
 
-            testCase.verifyEqual(str.currentOutput(), 'Progress [##..................]');
+        function disp_progressBar(testCase)
+            pb = ProgressBar(10); %#ok<*NASGU> 
+
+            output = evalc("pb.disp('Progress {bar}')");
+
+            testCase.verifyEqual(output, 'Progress [##..................]');
         end
     end
 end
