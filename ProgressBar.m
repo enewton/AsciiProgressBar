@@ -7,6 +7,7 @@ classdef ProgressBar < handle
         timeFilterWindow = 5;
         formatString = 'Progress: {bar} Time remaining: {timeRemaining}';
         formatTime = '%0.1f'
+        formatDateTime = 'dd-mmm-yyyy HH:MM:SS'
 
         progressWidth = 20
         progressCharFirst = '['
@@ -19,9 +20,11 @@ classdef ProgressBar < handle
     properties (Access=protected)
         funTic = @tic
         funToc = @toc
+        funNow = @now
     end
 
     properties (Access=private)
+        latestTime
         totalIterations
         currentIteration = 0
         lastTic
@@ -32,11 +35,13 @@ classdef ProgressBar < handle
     methods
         function obj = ProgressBar(totalIterations)
             obj.totalIterations = totalIterations;
+            obj.latestTime = obj.funNow();
             obj.lastTic = obj.funTic();
             obj.measurements = [];
         end
 
         function disp(obj, formatString)
+            obj.latestTime = obj.funNow();
             obj.measurements = [obj.measurements, obj.funToc(obj.lastTic)];
             if length(obj.measurements) > obj.timeFilterWindow
                 obj.measurements = obj.measurements(2:end);
@@ -50,6 +55,7 @@ classdef ProgressBar < handle
 
             output = strrep(formatString, '{timeRemaining}', obj.timeRemaining());
             output = strrep(output, '{bar}', obj.progressBar());
+            output = strrep(output, '{eta}', obj.etaString());
 
             fprintf(obj.outputStream, repmat('\b', 1, obj.numCharsLastPrinted));
 
@@ -69,6 +75,10 @@ classdef ProgressBar < handle
             end
         end
 
+        function eta = etaString(obj)
+            eta = datestr(obj.latestTime + obj.secondsRemaining()/60/60/24, obj.formatDateTime);
+        end
+
         function seconds = secondsRemaining(obj)
             seconds = (obj.totalIterations - obj.currentIteration) * mean(obj.measurements);
         end
@@ -79,7 +89,7 @@ classdef ProgressBar < handle
 
         function barString = progressBar(obj)
             numCompleteChars = floor(obj.progressWidth * obj.fractionComplete());
-            
+
             barString = [obj.progressCharFirst, ...
                 repmat(obj.progressCharDone,1,numCompleteChars), ...
                 repmat(obj.progressCharTodo,1,obj.progressWidth-numCompleteChars), ...
