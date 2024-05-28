@@ -1,5 +1,5 @@
-% First example script demonstrating how to get a Progress Bar in your
-% application by adding 2 lines:
+% Example script demonstrating how to get a Progress Bar in your application by
+% adding 2 lines:
 
 numX = 10;
 numY = 5;
@@ -21,4 +21,4 @@ for lpx = 1:numX
     end
 end
 
-fprintf('\nAll done.');
+fprintf('\nAll done.\n');
