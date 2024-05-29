@@ -130,6 +130,11 @@ classdef ProgressBar < handle
             obj.lastTic = obj.funTic();
         end
 
+        % Need to override `display` so we can use `disp` for our own purposes
+        function display(obj) %#ok<DISPLAY> 
+            builtin('disp', obj)
+        end
+
         function timeRemaining = timeRemaining(obj)
             timeRemaining = obj.timeAsString(obj.secondsRemaining());
         end
