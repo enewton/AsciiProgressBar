@@ -4,15 +4,15 @@ classdef ProgressBar < handle
     % Example usage:
     %
     %     numSteps = 100;
-    %     
+    %
     %     % Construct class, telling ProgressBar how many steps there will be
     %     pb = ProgressBar(numSteps);
-    %     
+    %
     %     for lp = 1:numSteps
-    %     
+    %
     %         % Do some work
     %         pause(0.1);
-    %     
+    %
     %         % Display the progress bar
     %         pb.disp("Progress: {bar} Time remaining: {timeRemaining}");
     %     end
@@ -73,8 +73,30 @@ classdef ProgressBar < handle
     end
 
     methods
-        function obj = ProgressBar(totalIterations)
+        function obj = ProgressBar(totalIterations, varargin)
             obj.totalIterations = totalIterations;
+
+            switch length(varargin)
+                case 0
+                    options = struct();
+                case 1
+                    options = varargin{1};
+                otherwise
+                    options = struct(varargin{:});
+            end
+
+            fnOptions = fieldnames(options);
+            fnObj = fieldnames(obj);
+
+            for lp = 1:length(fnOptions)
+                iProperty = find(strcmpi(fnOptions{lp}, fnObj), 1);
+                if iProperty
+                    obj.(fnObj{iProperty}) = options.(fnOptions{lp});
+                else
+                    error('PROGRESS_BAR:INVALID_OPTION', ['Unkown option: ', fnOptions{lp}])
+                end
+            end
+
             obj.startTime = obj.funNow();
             obj.latestTime = obj.funNow();
             obj.lastTic = obj.funTic();
