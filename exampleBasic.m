@@ -15,7 +15,7 @@ for lpx = 1:numX
         % Do some work
         pause(0.2);
 
-        % Display the progress bar
+        % Display the progress, with your own format
         pb.disp('Progress: {bar} Time remaining: {timeRemaining}');
 
     end

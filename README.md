@@ -17,7 +17,7 @@ why this one is worth considering:
 
 You need to construct an instance of `ProgressBar` telling it how many
 iterations the loop will be. If running nested loops, then initialise it with
-the product of all the loop sizes (See example.m)
+the product of all the loop sizes (See exampleBasic.m)
 
 ## Example
 
@@ -50,14 +50,14 @@ Progress: [########............] Time remaining: 5.4 seconds
 The following placeholder strings enclosed in {braces} can be used in the `disp`
 format string:
 
-| Field placeholder | Description                                                         | Associated Example |
-| ----------------- | ------------------------------------------------------------------- | ------------------ |
-|  {timeRemaining}  | Estimated time remaining in sensible units. (seconds/minutes/hours) | example.m          |
-|  {timeElapsed}    | Elapsed time in sensible units. (seconds/minutes/hours)             |                    |
-|  {bar}            | ASCII graphical progress bar                                        | example.m          |
-|  {eta}            | 'Estimated Time of Arrival'                                         | exampleEta.m       |
-|  {step}           | Current iteration number.                                           | exampleSteps.m     |
-|  {steps}          | Total number of iterations to complete                              | exampleSteps.m     |
+| Field Placeholder | Description                                                               | Associated Example |
+| ----------------- | ------------------------------------------------------------------------- | ------------------ |
+|  {bar}            | ASCII graphical progress bar                                              | exampleBasic.m     |
+|  {eta}            | 'Estimated Time of Arrival'. Estimate of absolute date/time of completion | exampleEta.m       |
+|  {timeRemaining}  | Estimated time remaining in sensible units. (seconds/minutes/hours)       | exampleBasic.m     |
+|  {timeElapsed}    | Elapsed time in sensible units. (seconds/minutes/hours)                   | exampleEta.m       |
+|  {step}           | Current iteration number.                                                 | exampleSteps.m     |
+|  {steps}          | Total number of iterations to complete                                    | exampleSteps.m     |
 
 In addition to defining your own format string, you can also set a number of
 other properties via the `ProgressBar` constructor. See `exampleOptions.m`.

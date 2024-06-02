@@ -3,7 +3,7 @@
 
 numLp = 200;
 
-fprintf('Please wait: ');
+fprintf('Please wait - ');
 
 % Need to tell it how many iterations there will be
 pb = ProgressBar(numLp);
@@ -14,7 +14,7 @@ for lp = 1:numLp
         pause(1);
 
         % Display the progress bar
-        pb.disp('Remaining: {timeRemaining} ETA: {eta}');
+        pb.disp('Elapsed time: {timeElapsed} ETA: {eta}');
 
 end
 
